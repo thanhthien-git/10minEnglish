@@ -58,6 +58,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://10min-english.vercel.app/",
   },
+  verification: {
+    google: "googlecc06b2b3aa6ff0fe",
+  },
   robots: {
     index: true,
     follow: true,
