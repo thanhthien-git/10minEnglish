@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import Footer from "./components/footer";
-
-// FadeSection giữ nguyên các animation bên trong
+import Footer from "../components/footer";
+import Modal from "@/components/ui/modal";
+import AuthForm from "@/components/auth-form";
+import { useRouter } from "next/navigation";
 const FadeSection = ({
   children,
   delay = 0,
@@ -27,11 +27,11 @@ const FadeSection = ({
   );
 };
 
-// SlideSection cho toàn bộ section dạt vào/dạt ra
+// SlideSection
 const SlideSection = ({
   children,
   delay = 0,
-  direction = "left", // left hoặc right
+  direction = "left",
 }: {
   children: React.ReactNode;
   delay?: number;
@@ -60,12 +60,23 @@ export default function LandingPage() {
   const [activeSection, setActiveSection] = useState<
     "about" | "commitments" | "pricing"
   >("about");
+  const router = useRouter();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"login" | "register">("login");
 
   const aboutRef = useRef<HTMLDivElement>(null);
   const commitmentsRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
+
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+
+  const handleSubmit = async () => {
+    router.push("/dashboard");
+  };
+  const handleCloseModal = useCallback(() => {
+    setModalOpen(false);
+  }, []);
 
   useEffect(() => {
     if (paused) return;
@@ -92,7 +103,7 @@ export default function LandingPage() {
     setMenuOpen(false);
   };
 
-  // Highlight header khi scroll
+  // highlight section
   useEffect(() => {
     const sections = [
       { ref: aboutRef, key: "about" as const },
@@ -115,12 +126,39 @@ export default function LandingPage() {
     );
 
     sections.forEach((s) => s.ref.current && observer.observe(s.ref.current));
-
     return () =>
       sections.forEach(
         (s) => s.ref.current && observer.unobserve(s.ref.current)
       );
   }, []);
+
+  // hero contents
+  const heroContents = [
+    {
+      title: "QuickLangua",
+      subtitle: (
+        <>
+          Mini time, maxi learn! <br /> 10 câu, 10 phút, tiến bộ thật nhanh!
+        </>
+      ),
+    },
+    {
+      title: "Học hiệu quả",
+      subtitle: (
+        <>
+          Flashcards thông minh <br /> Ghi nhớ từ vựng nhanh chóng.
+        </>
+      ),
+    },
+    {
+      title: "Phân tích cá nhân",
+      subtitle: (
+        <>
+          AI đánh giá năng lực riêng. <br /> Cá nhân hóa lộ trình học tập.
+        </>
+      ),
+    },
+  ];
 
   const features = [
     {
@@ -138,12 +176,6 @@ export default function LandingPage() {
       title: "Flashcards miễn phí",
       desc: "Ôn tập nhanh chóng với flashcards thông minh và mẹo học hiệu quả từ chuyên gia!",
     },
-  ];
-
-  const stats = [
-    { value: "1000+", label: "Học viên đang học" },
-    { value: "95%", label: "Tỷ lệ hài lòng" },
-    { value: "50+", label: "Chủ đề đa dạng" },
   ];
 
   const commitments = [
@@ -190,37 +222,25 @@ export default function LandingPage() {
     },
   ];
 
-  const heroContents = [
-    {
-      title: "QuickLangua",
-      subtitle: (
-        <>
-          Mini time, maxi learn! <br /> 10 câu, 10 phút, tiến bộ thật nhanh!
-        </>
-      ),
-    },
-    {
-      title: "Học hiệu quả",
-      subtitle: (
-        <>
-          Flashcards thông minh <br /> Ghi nhớ từ vựng nhanh chóng.
-        </>
-      ),
-    },
-    {
-      title: "Phân tích cá nhân",
-      subtitle: (
-        <>
-          AI đánh giá năng lực riêng. <br /> Cá nhân hóa lộ trình học tập.
-        </>
-      ),
-    },
+  const stats = [
+    { value: "1000+", label: "Học viên đang học" },
+    { value: "95%", label: "Tỷ lệ hài lòng" },
+    { value: "50+", label: "Chủ đề đa dạng" },
   ];
 
   const orangeButton =
     "bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors";
   const outlineButton =
     "bg-white hover:bg-orange-50 text-orange-500 border border-orange-500 font-semibold py-3 px-6 rounded-lg transition-colors";
+
+  const openLogin = () => {
+    setModalMode("login");
+    setModalOpen(true);
+  };
+  const openRegister = () => {
+    setModalMode("register");
+    setModalOpen(true);
+  };
 
   return (
     <div className="font-sans">
@@ -229,7 +249,6 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
           <div className="text-2xl font-bold text-orange-500">QuickLangua</div>
 
-          {/* Desktop menu */}
           <div className="hidden md:flex space-x-4">
             {["about", "commitments", "pricing"].map((tab) => (
               <button
@@ -251,14 +270,15 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link href="/login">
-              <span className="cursor-pointer text-gray-600 hover:text-orange-500 font-medium">
-                Đăng nhập
-              </span>
-            </Link>
-            <Link href="/signup">
-              <span className={orangeButton}>Bắt đầu ngay</span>
-            </Link>
+            <button
+              onClick={openLogin}
+              className="cursor-pointer text-gray-600 hover:text-orange-500 font-medium"
+            >
+              Đăng nhập
+            </button>
+            <button onClick={openRegister} className={orangeButton}>
+              Bắt đầu ngay
+            </button>
           </div>
 
           <button
@@ -269,7 +289,6 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden bg-white shadow-md">
             <div className="flex flex-col items-center py-4 space-y-2">
@@ -286,16 +305,18 @@ export default function LandingPage() {
                     : "Pricing"}
                 </button>
               ))}
-              <Link href="/login">
-                <span className="cursor-pointer text-gray-600 hover:text-orange-500 font-medium mt-2">
-                  Đăng nhập
-                </span>
-              </Link>
-              <Link href="/signup">
-                <span className={orangeButton + " w-3/4 text-center mt-2"}>
-                  Bắt đầu ngay
-                </span>
-              </Link>
+              <button
+                onClick={openLogin}
+                className="cursor-pointer text-gray-600 hover:text-orange-500 font-medium mt-2"
+              >
+                Đăng nhập
+              </button>
+              <button
+                onClick={openRegister}
+                className={orangeButton + " w-3/4 text-center mt-2"}
+              >
+                Bắt đầu ngay
+              </button>
             </div>
           </div>
         )}
@@ -325,13 +346,12 @@ export default function LandingPage() {
             </AnimatePresence>
 
             <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-4">
-              <Link href={"/sign-up"}>
-                <span
-                  className={`${outlineButton} w-full sm:w-auto text-center`}
-                >
-                  Bắt đầu ngay
-                </span>
-              </Link>
+              <button
+                onClick={openRegister}
+                className={`${outlineButton} w-full sm:w-auto text-center`}
+              >
+                Bắt đầu ngay
+              </button>
             </div>
           </div>
 
@@ -341,30 +361,35 @@ export default function LandingPage() {
             className="absolute bottom-0 right-4 w-auto h-60 sm:h-96 md:h-[28rem] lg:h-[32rem] hidden md:block"
           />
         </section>
-
-        {/* Sections: About, Commitments, Pricing, CTA */}
         <div className="p-6 sm:p-20 bg-orange-200 flex flex-col gap-8">
-          {/* About */}
+          {/* About */}{" "}
           <SlideSection direction="left">
+            {" "}
             <section
               ref={aboutRef}
               className="py-16 px-4 sm:px-6 lg:px-20 text-center bg-white rounded-xl shadow-lg"
             >
+              {" "}
               <h2 className="text-3xl sm:text-4xl font-bold text-orange-500 mb-4">
-                Về chúng tôi
-              </h2>
+                {" "}
+                Về chúng tôi{" "}
+              </h2>{" "}
               <p className="text-gray-700 mb-2">
+                {" "}
                 Thành lập năm 2025, QuickLangua mang sứ mệnh giúp mọi người học
-                tiếng Anh hiệu quả mỗi ngày.
-              </p>
+                tiếng Anh hiệu quả mỗi ngày.{" "}
+              </p>{" "}
               <p className="text-gray-700 mb-8">
+                {" "}
                 Chúng tôi tự hào với phương pháp học ngắn nhưng chất lượng cao:
                 flashcards thông minh, mini-test 10 phút, AI cá nhân hóa lộ
-                trình học.
-              </p>
+                trình học.{" "}
+              </p>{" "}
               <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8 flex-wrap">
+                {" "}
                 {features.map((f, i) => (
                   <FadeSection key={i} delay={i * 0.2}>
+                    {" "}
                     <motion.div
                       whileHover={{
                         scale: 1.03,
@@ -372,41 +397,51 @@ export default function LandingPage() {
                       }}
                       className="bg-white border border-orange-500 shadow-md rounded-lg p-6 sm:p-8 w-full sm:w-72 mx-auto mb-4 sm:mb-0 cursor-pointer transition-all"
                     >
-                      <div className="text-4xl mb-4">{f.icon}</div>
+                      {" "}
+                      <div className="text-4xl mb-4">{f.icon}</div>{" "}
                       <h3 className="text-xl font-semibold text-orange-500 mb-2">
-                        {f.title}
-                      </h3>
-                      <p className="text-gray-600">{f.desc}</p>
-                    </motion.div>
+                        {" "}
+                        {f.title}{" "}
+                      </h3>{" "}
+                      <p className="text-gray-600">{f.desc}</p>{" "}
+                    </motion.div>{" "}
                   </FadeSection>
-                ))}
-              </div>
+                ))}{" "}
+              </div>{" "}
               <div className="flex flex-col sm:flex-row justify-center gap-8 flex-wrap">
+                {" "}
                 {stats.map((s, i) => (
                   <div className="w-full sm:w-auto" key={i}>
+                    {" "}
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-500 mb-2">
-                      {s.value}
-                    </h3>
-                    <p className="text-gray-600">{s.label}</p>
+                      {" "}
+                      {s.value}{" "}
+                    </h3>{" "}
+                    <p className="text-gray-600">{s.label}</p>{" "}
                   </div>
-                ))}
-              </div>
-            </section>
-          </SlideSection>
-
-          {/* Commitments */}
+                ))}{" "}
+              </div>{" "}
+            </section>{" "}
+          </SlideSection>{" "}
+          {/* Commitments */}{" "}
           <SlideSection direction="right">
+            {" "}
             <section
               ref={commitmentsRef}
               className="py-16 px-4 sm:px-6 lg:px-20 text-center bg-white rounded-xl shadow-md"
             >
+              {" "}
               <FadeSection>
+                {" "}
                 <h2 className="text-3xl sm:text-4xl font-bold text-orange-500 mb-12">
-                  Cam kết của chúng tôi
-                </h2>
+                  {" "}
+                  Cam kết của chúng tôi{" "}
+                </h2>{" "}
                 <div className="flex flex-col sm:flex-row justify-center gap-6 items-stretch flex-wrap">
+                  {" "}
                   {commitments.map((c, i) => (
                     <FadeSection key={i} delay={i * 0.2}>
+                      {" "}
                       <motion.div
                         whileHover={{
                           scale: 1.05,
@@ -414,80 +449,70 @@ export default function LandingPage() {
                         }}
                         className="bg-white rounded-lg border-2 border-orange-500 p-6 sm:p-8 w-full sm:w-72 mx-auto mb-4 sm:mb-0 flex flex-col h-full cursor-pointer transition-all"
                       >
+                        {" "}
                         <div className="flex-1 flex flex-col justify-between">
-                          <div className="text-4xl mb-4">{c.icon}</div>
+                          {" "}
+                          <div className="text-4xl mb-4">{c.icon}</div>{" "}
                           <h3 className="text-xl font-semibold text-orange-500 mb-2">
-                            {c.title}
-                          </h3>
-                          <p className="text-gray-600">{c.desc}</p>
-                        </div>
-                      </motion.div>
+                            {" "}
+                            {c.title}{" "}
+                          </h3>{" "}
+                          <p className="text-gray-600">{c.desc}</p>{" "}
+                        </div>{" "}
+                      </motion.div>{" "}
                     </FadeSection>
-                  ))}
-                </div>
-              </FadeSection>
-            </section>
+                  ))}{" "}
+                </div>{" "}
+              </FadeSection>{" "}
+            </section>{" "}
           </SlideSection>
-
           {/* Pricing */}
-          <SlideSection direction="left">
-            <section
-              ref={pricingRef}
-              className="bg-white py-16 px-4 sm:px-6 lg:px-20 text-center rounded-xl shadow-lg"
-            >
-              <FadeSection>
-                <h2 className="text-3xl sm:text-4xl font-bold text-orange-500 mb-12">
-                  Gói trả phí
-                </h2>
-                <div className="flex flex-col sm:flex-row justify-center gap-6 flex-wrap">
-                  {pricingPlans.map((p, i) => (
-                    <FadeSection key={i} delay={i * 0.2}>
-                      <div className="bg-white rounded-lg p-6 sm:p-8 w-full sm:w-72 mx-auto mb-4 sm:mb-0 border-2 border-orange-400 shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300">
-                        <h3 className="text-xl font-semibold text-orange-500 mb-2">
-                          {p.title}
-                        </h3>
-                        <h4 className="text-3xl font-bold mb-4 text-black">
-                          {p.price}
-                        </h4>
-                        <ul className="text-gray-600 mb-4 ">
-                          {p.features.map((f, idx) => (
-                            <li key={idx}>{f}</li>
-                          ))}
-                        </ul>
-                        <Link href="/signup">
-                          <span className={`${orangeButton}`}>Bắt đầu</span>
-                        </Link>
-                      </div>
-                    </FadeSection>
-                  ))}
-                </div>
-              </FadeSection>
-            </section>
-          </SlideSection>
-
-          {/* CTA */}
-          <SlideSection direction="right">
-            <section className="py-16 px-4 sm:px-6 lg:px-20 text-center bg-orange-500 rounded-xl text-white">
-              <FadeSection>
-                <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                  Sẵn sàng bắt đầu học tiếng Anh mỗi ngày?
-                </h2>
-                <p className="mb-6">
-                  Tham gia ngay QuickLangua và trải nghiệm phương pháp học thông
-                  minh, hiệu quả!
-                </p>
-                <Link href="/signup">
-                  <span
-                    className={`${outlineButton} text-orange-500 border-white`}
-                  >
-                    Bắt đầu ngay
-                  </span>
-                </Link>
-              </FadeSection>
-            </section>
-          </SlideSection>
+          <div className="p-6 sm:p-20 bg-orange-200 flex flex-col gap-8">
+            <SlideSection direction="left">
+              <section
+                ref={pricingRef}
+                className="bg-white py-16 px-4 sm:px-6 lg:px-20 text-center rounded-xl shadow-lg"
+              >
+                <FadeSection>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-orange-500 mb-12">
+                    Gói trả phí
+                  </h2>
+                  <div className="flex flex-col sm:flex-row justify-center gap-6 flex-wrap">
+                    {pricingPlans.map((p, i) => (
+                      <FadeSection key={i} delay={i * 0.2}>
+                        <div className="bg-white rounded-lg p-6 sm:p-8 w-full sm:w-72 mx-auto mb-4 sm:mb-0 border-2 border-orange-400 shadow-md hover:shadow-xl hover:scale-105 transition-transform duration-300">
+                          <h3 className="text-xl font-semibold text-orange-500 mb-2">
+                            {p.title}
+                          </h3>
+                          <h4 className="text-3xl font-bold mb-4 text-black">
+                            {p.price}
+                          </h4>
+                          <ul className="text-gray-600 mb-4 ">
+                            {p.features.map((f, idx) => (
+                              <li key={idx}>{f}</li>
+                            ))}
+                          </ul>
+                          <button
+                            onClick={openRegister}
+                            className={orangeButton}
+                          >
+                            Bắt đầu
+                          </button>
+                        </div>
+                      </FadeSection>
+                    ))}
+                  </div>
+                </FadeSection>
+              </section>
+            </SlideSection>
+          </div>
         </div>
       </main>
+
+      {/* Modal auth */}
+      <Modal isOpen={modalOpen} onClose={handleCloseModal}>
+        <AuthForm initialMode={modalMode} onSuccess={handleSubmit} />
+      </Modal>
 
       <Footer />
     </div>
