@@ -19,13 +19,12 @@ export const metadata: Metadata = {
     "Mini time maxi learn",
   ],
   authors: [{ name: "QuickLangua Team" }],
-  colorScheme: "light",
   metadataBase: new URL("https://quicklangua.vercel.app"),
   openGraph: {
     title: "QuickLangua — Mini time, maxi learn",
     description:
       "Thử mini-test 10 câu trong 10 phút, nhận phân tích cá nhân & lộ trình học. Flashcards miễn phí cho người bận rộn.",
-    url: "https://10min-english.vercel.app",
+    url: "https://quicklangua.vercel.app",
     siteName: "QuickLangua",
     locale: "vi_VN",
     type: "website",
