@@ -84,7 +84,8 @@ export default function LandingPage() {
         : pricingRef;
 
     if (ref.current) {
-      const top = ref.current.getBoundingClientRect().top + window.scrollY - 100;
+      const top =
+        ref.current.getBoundingClientRect().top + window.scrollY - 100;
       window.scrollTo({ top, behavior: "smooth" });
     }
 
@@ -191,7 +192,7 @@ export default function LandingPage() {
 
   const heroContents = [
     {
-      title: "10MinuteE",
+      title: "QuickLangua",
       subtitle: (
         <>
           Mini time, maxi learn! <br /> 10 câu, 10 phút, tiến bộ thật nhanh!
@@ -226,7 +227,7 @@ export default function LandingPage() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
-          <div className="text-2xl font-bold text-orange-500">10MinuteE</div>
+          <div className="text-2xl font-bold text-orange-500">QuickLangua</div>
 
           {/* Desktop menu */}
           <div className="hidden md:flex space-x-4">
@@ -353,7 +354,7 @@ export default function LandingPage() {
                 Về chúng tôi
               </h2>
               <p className="text-gray-700 mb-2">
-                Thành lập năm 2025, 10MinuteE mang sứ mệnh giúp mọi người học
+                Thành lập năm 2025, QuickLangua mang sứ mệnh giúp mọi người học
                 tiếng Anh hiệu quả mỗi ngày.
               </p>
               <p className="text-gray-700 mb-8">
@@ -472,11 +473,13 @@ export default function LandingPage() {
                   Sẵn sàng bắt đầu học tiếng Anh mỗi ngày?
                 </h2>
                 <p className="mb-6">
-                  Tham gia ngay 10MinuteE và trải nghiệm phương pháp học thông
+                  Tham gia ngay QuickLangua và trải nghiệm phương pháp học thông
                   minh, hiệu quả!
                 </p>
                 <Link href="/signup">
-                  <span className={`${outlineButton} text-orange-500 border-white`}>
+                  <span
+                    className={`${outlineButton} text-orange-500 border-white`}
+                  >
                     Bắt đầu ngay
                   </span>
                 </Link>

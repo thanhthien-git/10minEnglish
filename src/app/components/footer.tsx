@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
               10
             </div>
-            <span className="font-bold text-lg text-gray-900">10MinuteE</span>
+            <span className="font-bold text-lg text-gray-900">QuickLangua</span>
           </div>
           <p className="text-gray-700 text-sm">
             Học tiếng Anh mỗi ngày, nhanh chóng & hiệu quả với mini test,
@@ -118,7 +118,7 @@ export default function Footer() {
                 href="#about"
                 className="hover:text-orange-500 transition-colors"
               >
-                Về 10MinuteE
+                Về QuickLangua
               </a>
             </li>
             <li>
@@ -142,7 +142,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-orange-200 mt-6 pt-4 text-center text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} 10MinuteE. All rights reserved.
+        &copy; {new Date().getFullYear()} QuickLangua. All rights reserved.
       </div>
     </footer>
   );

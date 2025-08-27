@@ -5,11 +5,11 @@ import { ConfigProvider } from "antd";
 
 export const metadata: Metadata = {
   title: {
-    default: "10MinuteE — Mini time, maxi learn",
-    template: "%s | 10MinuteE",
+    default: "QuickLangua — Mini time, maxi learn",
+    template: "%s | QuickLangua",
   },
   description:
-    "10MinuteE — Thử mini-test 10 câu trong 10 phút, nhận phân tích cá nhân và lộ trình học nhanh. Flashcards, quiz & tips dành cho người bận rộn.",
+    "QuickLangua — Thử mini-test 10 câu trong 10 phút, nhận phân tích cá nhân và lộ trình học nhanh. Flashcards, quiz & tips dành cho người bận rộn.",
   keywords: [
     "10 phút học",
     "mini test 10 câu",
@@ -18,32 +18,32 @@ export const metadata: Metadata = {
     "học hiệu quả",
     "Mini time maxi learn",
   ],
-  authors: [{ name: "10MinuteE Team" }],
+  authors: [{ name: "QuickLangua Team" }],
   colorScheme: "light",
   metadataBase: new URL("https://10min-english.vercel.app"),
   openGraph: {
-    title: "10MinuteE — Mini time, maxi learn",
+    title: "QuickLangua — Mini time, maxi learn",
     description:
       "Thử mini-test 10 câu trong 10 phút, nhận phân tích cá nhân & lộ trình học. Flashcards miễn phí cho người bận rộn.",
     url: "https://10min-english.vercel.app",
-    siteName: "10MinuteE",
+    siteName: "QuickLangua",
     locale: "vi_VN",
     type: "website",
     images: [
       {
-        url: "https://via.placeholder.com/1200x630.png?text=10MinuteE",
+        url: "https://via.placeholder.com/1200x630.png?text=QuickLangua",
         width: 1200,
         height: 630,
-        alt: "10MinuteE — Mini time, maxi learn",
+        alt: "QuickLangua — Mini time, maxi learn",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "10MinuteE — Mini time, maxi learn",
+    title: "QuickLangua — Mini time, maxi learn",
     description:
       "Làm 10 câu, nhận phân tích và flashcards miễn phí. Học nhanh, tiến bộ thật.",
-    images: ["https://via.placeholder.com/1200x630.png?text=10MinuteE"],
+    images: ["https://via.placeholder.com/1200x630.png?text=QuickLangua"],
   },
   alternates: {
     canonical: "https://10min-english.vercel.app/",
@@ -64,10 +64,10 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "10MinuteE",
+  name: "QuickLangua",
   url: "https://10min-english.vercel.app",
   description:
-    "10MinuteE - Mini test 10 câu trong 10 phút và flashcards giúp người bận rộn cải thiện kỹ năng tiếng Anh nhanh chóng.",
+    "QuickLangua - Mini test 10 câu trong 10 phút và flashcards giúp người bận rộn cải thiện kỹ năng tiếng Anh nhanh chóng.",
   applicationCategory: "Education",
   operatingSystem: "Web",
 };
