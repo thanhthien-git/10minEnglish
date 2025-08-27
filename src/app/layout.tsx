@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "QuickLangua Team" }],
   colorScheme: "light",
-  metadataBase: new URL("https://10min-english.vercel.app"),
+  metadataBase: new URL("https://quicklangua.vercel.app"),
   openGraph: {
     title: "QuickLangua — Mini time, maxi learn",
     description:
@@ -46,10 +46,7 @@ export const metadata: Metadata = {
     images: ["https://via.placeholder.com/1200x630.png?text=QuickLangua"],
   },
   alternates: {
-    canonical: "https://10min-english.vercel.app/",
-  },
-  verification: {
-    google: "googlecc06b2b3aa6ff0fe",
+    canonical: "https://quicklangua.vercel.app/",
   },
   robots: {
     index: true,
@@ -65,7 +62,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "QuickLangua",
-  url: "https://10min-english.vercel.app",
+  url: "https://quicklangua.vercel.app",
   description:
     "QuickLangua - Mini test 10 câu trong 10 phút và flashcards giúp người bận rộn cải thiện kỹ năng tiếng Anh nhanh chóng.",
   applicationCategory: "Education",
